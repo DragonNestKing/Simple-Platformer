@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export(int) var JUMP_FORCE = -150
 export(int) var JUMP_RELEASE_FORCE = -70
-export(int) var MAX_SPEED = 50
+export(int) var MAX_SPEED = 100
 export(int) var ACCELERATION = 20
 export(int) var FRICTION = 20
 export(int) var GRAVITY = 4
@@ -39,9 +39,14 @@ func _physics_process(delta: float) -> void:
 func apply_gravity():
 	# gravity
 	velocity.y += GRAVITY
+	velocity.y = min(velocity.y, 200)
 	
 func apply_friction():
 	velocity.x = move_toward(velocity.x, 0, FRICTION)
 	
 func apply_acceleration(amount):
 	velocity.x = move_toward(velocity.x, MAX_SPEED * amount, ACCELERATION)
+
+
+func _on_DETECTION_body_entered(body: Node) -> void:
+	get_tree().reload_current_scene()
